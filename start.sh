@@ -1,0 +1,1 @@
+gunicorn -c gunicorn_fxai.conf.py fuxi-service-ai:app
