@@ -28,7 +28,7 @@ def holoview_index():
     # forword all params to upstreamURL
     params = request.args.to_dict()
     upstreamURL = 'http://192.168.0.237:8678/api/ibsreveal/'
-    return requests.get(upstreamURL, params=params).content
+    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
 
 @holoview.route('/checkSignal', methods=['GET'])
@@ -36,5 +36,5 @@ def holoview_checkSignal():
     # forword all params to upstreamURL
     params = request.args.to_dict()
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/checkSignal'
-    return requests.get(upstreamURL, params=params).content
 
+    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]

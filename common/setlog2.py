@@ -69,7 +69,7 @@ def set_logger(log_path = 'log/', logfilename = 'app', env = 'unknown'):
         mailhost=('mail.enovatemotors.com', 587),
         fromaddr='holodata@enovatemotors.com',
         toaddrs=['guoliang@enovatemotors.com'],
-        subject=LOG_basename + ' ' + env + ': Omega Error',
+        subject=LOG_basename + ' ' + env + ': FUXI-SERVICE-AI Error',
         secure=("", ""),
         credentials=('holodata', '@123qwe')
     )
