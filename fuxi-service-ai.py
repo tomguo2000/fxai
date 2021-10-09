@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 from config import CONFIG,env
 from flask import Flask, request
-import logging
 from common.setlog2 import set_logger
 logger = set_logger(CONFIG['LOG_path'], CONFIG['LOG_basename'], env=env)
 
 app = Flask(__name__)
 ApplicationVersion = '0.0.1'
+
 
 @app.before_request
 def logger_request_info():
