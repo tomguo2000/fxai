@@ -6,3 +6,4 @@ Flask==2.0.2
 Flask_APScheduler==1.12.2
 gunicorn==20.1.0
 retrying==1.3.3
+Flask-gzip==0.2

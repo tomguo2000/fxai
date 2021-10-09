@@ -4,11 +4,14 @@ from flask import Flask, request
 from common.setlog2 import set_logger
 from config import ApplicationVersion
 from api.holoview import holoview
+from flask_gzip import Gzip
 
 logger = set_logger(CONFIG['LOG_path'], CONFIG['LOG_basename'], env=env)
 
 app = Flask(__name__)
 app.register_blueprint(holoview, url_prefix="/ai/api/holoview")
+
+gzip = Gzip(app)
 
 @app.before_request
 def logger_request_info():
@@ -26,7 +29,7 @@ def logger_response_info(response):
     X_Forwarded_For = request.headers.get('X-Forwarded-For')
     Fx_Remote_Addr = request.headers.get('Fx-Remote-Addr')
     Request_id = request.headers.get('request-id')
-    logger.info(f"请求URL:{request.url}. 来源IP地址:{Fx_Remote_Addr}. 来源X_Forwarded_For地址:{X_Forwarded_For}. Request_id:{Request_id}. Response:{response.data}")
+    logger.info(f"请求URL:{request.url}. 来源IP地址:{Fx_Remote_Addr}. 来源X_Forwarded_For地址:{X_Forwarded_For}. Request_id:{Request_id}. Response: ... ")
     return response
 
 
