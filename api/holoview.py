@@ -27,7 +27,7 @@ holoview = Blueprint("holoview", __name__)
 def holoview_index():
     # forword all params to upstreamURL
     params = request.args.to_dict()
-    upstreamURL = 'http://192.168.0.237:8678/api/ibsreveal/'
+    upstreamURL = 'http://192.168.0.237:8678/api/holoview/'
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
 
