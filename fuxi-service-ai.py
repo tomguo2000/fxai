@@ -2,10 +2,11 @@
 from config import CONFIG,env
 from flask import Flask, request
 from common.setlog2 import set_logger
+from config import ApplicationVersion
+
 logger = set_logger(CONFIG['LOG_path'], CONFIG['LOG_basename'], env=env)
 
 app = Flask(__name__)
-ApplicationVersion = '0.0.1'
 
 
 @app.before_request
