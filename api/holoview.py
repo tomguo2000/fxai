@@ -17,6 +17,7 @@ index_blue = Blueprint('admin',__name__,template_folder='my_templates')
 
 from flask import Blueprint,render_template,make_response,jsonify
 from flask import request, Response
+from config import env
 import requests,json,base64,random,logging,time,asn1tools
 
 
@@ -27,6 +28,8 @@ holoview = Blueprint("holoview", __name__)
 def holoview_index():
     # forword all params to upstreamURL
     params = request.args.to_dict()
+    # Add env(online / test / local) into query params
+    params['env'] = env
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/'
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
@@ -35,6 +38,8 @@ def holoview_index():
 def holoview_checkSignal():
     # forword all params to upstreamURL
     params = request.args.to_dict()
+    # Add env(online / test / local) into query params
+    params['env'] = env
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/checkSignal'
 
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
