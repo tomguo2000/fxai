@@ -47,3 +47,25 @@ def holoview_checkSignal():
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/checkSignal'
 
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+
+
+@holoview.route('/overall', methods=["GET"])
+def holoview_getOverall():
+    overall = {
+        "event_ConnStatusList": "Tbox到平台连接事件",
+        "event_VehicleLoginList": "车辆登录Vehicle服务事件",
+        "event_RemoteCmdList": "远程控车指令事件",
+        "message_tj32960Login": "国标登录报文",
+        "message_tj32960Live": "国标实发报文",
+        "message_tj32960Resent": "国标补发报文",
+        "message_MSLive": "企标实发报文",
+        "message_MSResent": "企标补发报文",
+        "message_MSWarning": "企标告警报文",
+        "message_MiscList": "Misc报文",
+        "message_HeartbeatList": "心跳报文"
+    }
+    return {
+               "code": 200,
+               "message": "获取整体指标成功",
+               "businessObj": overall
+           }, 200
