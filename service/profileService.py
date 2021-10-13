@@ -10,13 +10,15 @@ class ProfileService(object):
     def __init__(self, profileName,
                  author=None,
                  description=None,
-                 content=None):
+                 content=None,
+                 public=None):
         "......"
 
         self.profileName = profileName
         self.author = author
         self.description = description
         self.content = content
+        self.public = public
 
     def checkConflict(self):
         "check if the Object's name conflict with DB data"
@@ -50,15 +52,16 @@ class ProfileService(object):
                 "author": dbResponse[0]['author'],
                 "description": dbResponse[0].get('description'),
                 "content": dbResponse[0].get('content'),
+                "public": dbResponse[0].get('public'),
                 "downloadTimes": dbResponse[0].get('downloadTimes')
             }
             return resp
 
 
     @classmethod
-    def getProfiles(self):
+    def getProfiles(self, author):
         "get all profiles in DB"
-        dbResponse = list(db.profiles.find())
+        dbResponse = list(db.profiles.find({"$or": [{"author": author}, {"public": True}]}))
         resp = []
         for _item in dbResponse:
             _item['_id'] = str(_item['_id'])

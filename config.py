@@ -1,6 +1,6 @@
 import getopt, sys, os
 
-ApplicationVersion = "0.0.12"
+ApplicationVersion = "0.0.13"
 
 online = {
     # DB参数
@@ -66,7 +66,7 @@ local = {
 
 
 returncode = {
-    "188000": "参数错误，需要 profileName, author, description, content, overwrite(可选)",
+    "188000": "参数错误，需要 profileName, author, description, content, public, overwrite(可选)",
     "188001": "参数错误，需要 profileName, author",
     "188002": "没有这个profileName存在，敞开了来上传",
     "188003": "小天发现这个配置文件的名称已经存在，是否覆盖？",

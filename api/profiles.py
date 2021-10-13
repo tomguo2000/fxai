@@ -31,7 +31,8 @@ profiles = Blueprint("profiles", __name__)
 
 @profiles.route('/getProfiles', methods=["GET"])
 def profiles_getProfiles():
-    _profiles = ProfileService.getProfiles()
+    author = request.args.get('author')
+    _profiles = ProfileService.getProfiles(author)
     return {
                "code": 200,
                "message": "getProfiles成功",
@@ -42,18 +43,26 @@ def profiles_getProfiles():
 @profiles.route('/downloadProfile', methods=["GET"])
 def profiles_downloadProfile():
     profileName = request.args.get('profileName')
+    author = request.args.get('author')
     p = ProfileService.getProfile(profileName)
     if p:
-        return {
-                   "code": 200,
-                   "message": "downloadProfile成功",
-                   "businessObj": p
-               }, 200
+        if p['author'] == author:
+            return {
+                       "code": 200,
+                       "message": "downloadProfile成功",
+                       "businessObj": p
+                   }, 200
+        else:
+            return {
+                       "code": 188010,
+                       "message": "下载了个寂寞，有也不给你",
+                       "businessObj": None
+                   }, 200
     else:
         return {
                    "code": 188010,
                    "message": "下载了个寂寞，啥也没有",
-                   "businessObj": p
+                   "businessObj": None
                }, 200
 
 
@@ -71,13 +80,14 @@ def profiles_uploadProfile():
             author = postdata_json['author']
             description = postdata_json['description']
             content = postdata_json['content']
+            public = postdata_json['public']
             overwrite = postdata_json.get('overwrite')
 
         except Exception as ex:
             raise Exception("188000")
 
         # 检查冲突
-        p = ProfileService(profileName,author,description,content)
+        p = ProfileService(profileName,author,description,content,public)
         if ProfileService.checkConflict(p) == "188004":
             raise Exception("188004")
 
