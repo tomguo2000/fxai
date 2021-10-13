@@ -51,7 +51,8 @@ class ProfileService(object):
                 "profileName": dbResponse[0]['profileName'],
                 "author": dbResponse[0]['author'],
                 "description": dbResponse[0].get('description'),
-                "content": dbResponse[0].get('content')
+                "content": dbResponse[0].get('content'),
+                "downloadTimes": dbResponse[0].get('downloadTimes')
             }
             return resp
 
@@ -74,8 +75,9 @@ class ProfileService(object):
 
     def save2db(self, overwrite):
         checkConflictResult = self.checkConflict()
+        self.downloadTimes = 0
         if checkConflictResult == "188002":
-            return db.profiles.insert_one(self.__dict__)
+            return db.profiles.insert_one(self.__dict__,)
         elif checkConflictResult == "188003" and overwrite:
             p = self.getProfile(self.profileName)
             return db.profiles.update_one({'_id': ObjectId(p['_id'])}, {"$set": self.__dict__})
