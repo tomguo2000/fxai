@@ -4,12 +4,14 @@ from flask import Flask, request
 from common.setlog2 import set_logger
 from config import ApplicationVersion
 from api.holoview import holoview
+from api.profiles import profiles
 from flask_gzip import Gzip
 
 logger = set_logger(CONFIG['LOG_path'], CONFIG['LOG_basename'], env=env)
 
 app = Flask(__name__)
 app.register_blueprint(holoview, url_prefix="/ai/api/holoview")
+app.register_blueprint(profiles, url_prefix="/ai/api/holoview/profiles")
 
 gzip = Gzip(app)
 
@@ -47,6 +49,5 @@ def get_version():
 
 if __name__ == '__main__':
     logger.info("main starting....这条日志在用gunicore启动时，会不打印")
-
     app.run(host='0.0.0.0',port=9200,debug=False,use_reloader=False)
 
