@@ -116,7 +116,6 @@ def profiles_checkConflict():
         try:
             # 转为json
             postdata_json = json.loads(reqdata)
-            print(postdata_json)
             profileName = postdata_json['profileName']
             author = postdata_json['author']
 
@@ -125,16 +124,12 @@ def profiles_checkConflict():
 
         # 检查冲突
         p = ProfileService(profileName,author)
-        if ProfileService.checkConflict(p) == "188004":
-            raise Exception("188004")
 
         return {
                    "code": 200,
-                   "message": f"uploadProfile成功",
-                   "businessObj": None
+                   "message": f"checkConflict成功",
+                   "businessObj": ProfileService.checkConflict(p)
                }, 200
-
-
 
     except Exception as ex:
         logger.warning(ex)

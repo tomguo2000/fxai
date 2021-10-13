@@ -20,10 +20,8 @@ class ProfileService(object):
 
     def checkConflict(self):
         "check if the Object's name conflict with DB data"
-        dbResponseR = list(db.profiles.find({"$and": [{"author": self.author},
-                                                      {"profileName": self.profileName}
-                                                      ]
-                                             }, sort=[('_id', pymongo.DESCENDING)]))
+        dbResponseR = list(db.profiles.find({"profileName": self.profileName},
+                                            sort=[('_id', pymongo.DESCENDING)]))
         if len(dbResponseR) > 1:
             raise Exception("00000")
         elif len(dbResponseR) == 1 and dbResponseR[0].get('author') != self.author:
