@@ -44,7 +44,7 @@ def profiles_getProfiles():
 def profiles_downloadProfile():
     profileName = request.args.get('profileName')
     author = request.args.get('author')
-    p = ProfileService.getProfile(profileName)
+    p = ProfileService.downloadProfile(profileName)
     if p:
         if p['author'] == author:
             return {

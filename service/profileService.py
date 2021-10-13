@@ -57,6 +57,28 @@ class ProfileService(object):
             }
             return resp
 
+    @classmethod
+    def downloadTimesIncrease(self,profileName):
+        db.profiles.update_one({'profileName': profileName}, {"$inc": {"downloadTimes": 1}})
+
+    @classmethod
+    def downloadProfile(self, name):
+        "calc timeCost"
+        dbResponse = list(db.profiles.find({"profileName": name}))
+        if len(dbResponse) != 1:
+            return None
+        else:
+            self.downloadTimesIncrease(name)
+            resp = {
+                "_id" : str(dbResponse[0]['_id']),
+                "profileName": dbResponse[0]['profileName'],
+                "author": dbResponse[0]['author'],
+                "description": dbResponse[0].get('description'),
+                "content": dbResponse[0].get('content'),
+                "public": dbResponse[0].get('public'),
+                "downloadTimes": dbResponse[0].get('downloadTimes') + 1
+            }
+            return resp
 
     @classmethod
     def getProfiles(self, author):
