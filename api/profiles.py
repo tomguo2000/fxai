@@ -38,10 +38,11 @@ def profiles_getProfiles():
                "businessObj": _profiles
            }, 200
 
+
 @profiles.route('/downloadProfile', methods=["GET"])
 def profiles_downloadProfile():
     profileName = request.args.get('profileName')
-    p=ProfileService.getProfile(profileName)
+    p = ProfileService.getProfile(profileName)
     if p:
         return {
                    "code": 200,
@@ -54,7 +55,6 @@ def profiles_downloadProfile():
                    "message": "下载了个寂寞，啥也没有",
                    "businessObj": p
                }, 200
-
 
 
 @profiles.route('/uploadProfile', methods=["POST"])
@@ -124,11 +124,11 @@ def profiles_checkConflict():
 
         # 检查冲突
         p = ProfileService(profileName,author)
-
+        result = ProfileService.checkConflict(p)
         return {
                    "code": 200,
-                   "message": f"checkConflict成功",
-                   "businessObj": ProfileService.checkConflict(p)
+                   "message":  returncode[result],
+                   "businessObj": result
                }, 200
 
     except Exception as ex:
@@ -136,7 +136,7 @@ def profiles_checkConflict():
         logger.error(returncode[ex.args[0]])
         return {
                    "code": ex.args[0],
-                   "message": returncode[ex.args[0]],
+                   "message": ex.args[1] if len(ex.args) > 1 else returncode[ex.args[0]],
                    "businessObj": None
                }, 400
 
@@ -144,9 +144,19 @@ def profiles_checkConflict():
 
 @profiles.route('/deleteProfile', methods=["DELETE"])
 def profiles_deleteProfile():
-
-    return {
-               "code": 200,
-               "message": "deleteProfile成功",
-               "businessObj": None
-           }, 200
+    profileName = request.args.get('profileName')
+    author = request.args.get('author')
+    print(profileName)
+    result = ProfileService.deleteProfile(profileName=profileName,author=author)
+    if result == True:
+        return {
+                   "code": 200,
+                   "message": "deleteProfile成功",
+                   "businessObj": None
+               }, 200
+    else:
+        return {
+            "code": result,
+            "message": returncode[result],
+            "businessObj": None
+        }

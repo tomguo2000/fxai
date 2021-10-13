@@ -65,11 +65,17 @@ class ProfileService(object):
             resp.append(_item)
         return resp
 
-    def finish(self):
+    @classmethod
+    def deleteProfile(self, profileName, author):
         "calc timeCost"
-        self.timeCost = int(time.time()*1000) - self.beginTime
-        self.request = str(self.request)
-        self.response = str(self.response)
+        p = self.getProfile(name=profileName)
+        if p:
+            if p.get('author') == author:
+                db.profiles.delete_one({"profileName": profileName})
+                return True
+            else:
+                return "188011"
+        return "188012"
 
     def save2db(self, overwrite):
         checkConflictResult = self.checkConflict()
