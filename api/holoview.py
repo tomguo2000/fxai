@@ -16,9 +16,9 @@ index_blue = Blueprint('admin',__name__,template_folder='my_templates')
 """
 
 from flask import Blueprint,render_template,make_response,jsonify
-from flask import request, Response
+from flask import request
 from config import env
-import requests,json,base64,random,logging,time,asn1tools
+import requests
 
 
 holoview = Blueprint("holoview", __name__)
