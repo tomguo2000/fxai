@@ -46,7 +46,7 @@ def profiles_downloadProfile():
     author = request.args.get('author')
     p = ProfileService.downloadProfile(profileName)
     if p:
-        if p['author'] == author:
+        if p['author'] == author or p['public']:
             return {
                        "code": 200,
                        "message": "downloadProfile成功",
