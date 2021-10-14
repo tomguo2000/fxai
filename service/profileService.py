@@ -83,11 +83,24 @@ class ProfileService(object):
     @classmethod
     def getProfiles(self, author):
         "get all profiles in DB"
-        dbResponse = list(db.profiles.find({"$or": [{"author": author}, {"public": True}]}))
-        resp = []
-        for _item in dbResponse:
+        # dbResponse = list(db.profiles.find({"$or": [{"author": author}, {"public": True}]}))
+        dbResponsePublic = list(db.profiles.find({"public": True}, sort=[('downloadTimes', pymongo.DESCENDING)]))
+        dbResponseAuthor = list(db.profiles.find({"author": author}, sort=[('profileName', pymongo.ASCENDING)]))
+
+        publicList = []
+        for _item in dbResponsePublic:
             _item['_id'] = str(_item['_id'])
-            resp.append(_item)
+            publicList.append(_item)
+
+        authorList = []
+        for _item in dbResponseAuthor:
+            _item['_id'] = str(_item['_id'])
+            authorList.append(_item)
+
+        resp = {}
+        resp['publicList'] = publicList
+        resp['authorList'] = authorList
+
         return resp
 
     @classmethod
