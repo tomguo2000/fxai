@@ -85,7 +85,9 @@ class ProfileService(object):
         "get all profiles in DB"
         # dbResponse = list(db.profiles.find({"$or": [{"author": author}, {"public": True}]}))
         dbResponsePublic = list(db.profiles.find({"public": True}, sort=[('downloadTimes', pymongo.DESCENDING)]))
-        dbResponseAuthor = list(db.profiles.find({"author": author}, sort=[('profileName', pymongo.ASCENDING)]))
+        dbResponseAuthor = list(db.profiles.find({"$and": [{"author": author},
+                                                           {"public": False}]},
+                                                 sort=[('profileName', pymongo.ASCENDING)]))
 
         publicList = []
         for _item in dbResponsePublic:
