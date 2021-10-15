@@ -170,3 +170,12 @@ def profiles_deleteProfile():
             "message": returncode[result],
             "businessObj": None
         }
+
+
+@profiles.route('/getPopularSignals', methods=["GET"])
+def profiles_getPopularSignals():
+    return {
+               "code": 200,
+               "message": "getPopularSignals成功",
+               "businessObj": ProfileService.getPopularSignals()
+           }, 200

@@ -127,3 +127,25 @@ class ProfileService(object):
             return db.profiles.update_one({'_id': ObjectId(p['_id'])}, {"$set": self.__dict__})
         else:
             return None
+
+    @classmethod
+    def getPopularSignals(self):
+        "calc timeCost"
+        resp = [
+            {"BCM_SystemPowerMode": "整车电源状态 vehicle Power Status"},
+            {"ICM_ODOTotal": "ODO 总里程"},
+            {"VCU_GearLeverPos": "实际档位"},
+            {"ICM_DisPlayVehicleSpeed": "仪表当前显示车速"},
+            {"ESP_VehicleSpeed": "当前实际车速"},
+            {"VCU_Mileage": "续航里程"},
+            {"VCU_Charge_Connect": "充电枪连接"},
+            {"BMS_ChrFastState": "直流充电状态"},
+            {"BMS_ChrSlowState": "交流充电状态"},
+            {"IBS_SOC": "小电瓶SOC"},
+            {"IBS_SOH_SUL": "小电瓶SOH电池健康度"},
+            {"IBS_U_BATT": "小电瓶输出电压"},
+            {"VCU_LVSmartChrg_Status": "VCU智能补电状态"},
+
+        ]
+
+        return resp
