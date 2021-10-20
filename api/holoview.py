@@ -69,3 +69,16 @@ def holoview_getOverall():
                "message": "获取整体指标成功",
                "businessObj": overall
            }, 200
+
+
+
+@holoview.route('/help', methods=["GET"])
+def holoview_getHelp():
+    params = request.args.to_dict()
+    # Add env(online / test / local) into query params
+    if not params.get('env'):
+        params['env'] = env
+
+    upstreamURL = 'http://192.168.0.237:8678/api/holoview/help'
+
+    return requests.get(upstreamURL, params=params).content
