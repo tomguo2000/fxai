@@ -9,7 +9,7 @@ from flask_gzip import Gzip
 
 logger = set_logger(CONFIG['LOG_path'], CONFIG['LOG_basename'], env=env)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='', static_url_path='')
 app.register_blueprint(holoview, url_prefix="/ai/api/holoview")
 app.register_blueprint(profiles, url_prefix="/ai/api/holoview/profiles")
 
