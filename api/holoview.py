@@ -19,6 +19,8 @@ from flask import Blueprint,render_template,make_response,jsonify
 from flask import request
 from config import env
 import requests
+import base64
+import os
 
 
 holoview = Blueprint("holoview", __name__)
@@ -74,4 +76,13 @@ def holoview_getOverall():
 
 @holoview.route('/help', methods=["GET"])
 def holoview_getHelp():
-    return render_template('holoview_help.html')
+    #
+    print(os.path.curdir)
+    print(os.path.abspath('.'))
+    with open('static/imgs/max16.png', 'rb') as f:
+        img_base64data = base64.b64encode(f.read())
+        imgData = img_base64data.decode()
+        imgData = "data:image/png;base64," + imgData
+
+
+    return render_template('holoview_help.html', img1data=imgData)
