@@ -76,13 +76,14 @@ def holoview_getOverall():
 
 @holoview.route('/help', methods=["GET"])
 def holoview_getHelp():
-    #
-    print(os.path.curdir)
-    print(os.path.abspath('.'))
-    with open('static/imgs/max16.png', 'rb') as f:
-        img_base64data = base64.b64encode(f.read())
-        imgData = img_base64data.decode()
-        imgData = "data:image/png;base64," + imgData
+    # 这是本项目提供help内容的demo
+    # with open('static/imgs/max16.png', 'rb') as f:
+    #     img_base64data = base64.b64encode(f.read())
+    #     imgData = img_base64data.decode()
+    #     imgData = "data:image/png;base64," + imgData
+    # return render_template('holoview_help.html', img1data=imgData)
 
+    params = request.args.to_dict()
+    upstreamURL = 'http://192.168.0.237:8678/api/holoview/help'
 
-    return render_template('holoview_help.html', img1data=imgData)
+    return requests.get(upstreamURL, params=params).content
