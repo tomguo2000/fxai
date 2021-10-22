@@ -51,6 +51,19 @@ def holoview_checkSignal():
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
 
+@holoview.route('/findSignal', methods=['GET'])
+def holoview_findSignal():
+    # forword all params to upstreamURL
+    params = request.args.to_dict()
+    # Add env(online / test / local) into query params
+    if not params.get('env'):
+        params['env'] = env
+
+    upstreamURL = 'http://192.168.0.237:8678/api/holoview/findSignal'
+
+    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+
+
 @holoview.route('/overall', methods=["GET"])
 def holoview_getOverall():
     overall = {
