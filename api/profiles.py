@@ -86,6 +86,13 @@ def profiles_uploadProfile():
         except Exception as ex:
             raise Exception("188000")
 
+        # 检查命名是否包含特殊字符
+        invalidCharList = ['+','-','.','"','/','\\']
+        for _c in invalidCharList:
+            if _c in profileName:
+                raise Exception("188004", "亲，起名字别用这么特殊的字符，会搞晕小天的哦")
+
+
         # 检查冲突
         p = ProfileService(profileName,author,description,content,public)
         if ProfileService.checkConflict(p) == "188004":
@@ -105,13 +112,12 @@ def profiles_uploadProfile():
                        "businessObj": None
                    }, 200
 
-
     except Exception as ex:
         logger.warning(ex)
         logger.warning(returncode[ex.args[0]])
         return {
                    "code": ex.args[0],
-                   "message": returncode[ex.args[0]],
+                   "message": ex.args[1] if len(ex.args) > 1 else returncode[ex.args[0]],
                    "businessObj": None
                }, 200
 
