@@ -43,8 +43,8 @@ def holoview_checkSignal():
     # forword all params to upstreamURL
     params = request.args.to_dict()
     # Add env(online / test / local) into query params
-    if not params.get('env'):
-        params['env'] = env
+    # if not params.get('env'):
+    params['env'] = env
 
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/checkSignal'
 
@@ -56,8 +56,8 @@ def holoview_findSignal():
     # forword all params to upstreamURL
     params = request.args.to_dict()
     # Add env(online / test / local) into query params
-    if not params.get('env'):
-        params['env'] = env
+    # if not params.get('env'):
+    params['env'] = env
 
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/findSignal'
 
