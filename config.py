@@ -1,6 +1,6 @@
 import getopt, sys, os
 
-ApplicationVersion = "0.0.27"
+ApplicationVersion = "1.0.27"
 
 online = {
     # DB参数
