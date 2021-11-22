@@ -119,8 +119,8 @@ class ProfileService(object):
 
     def save2db(self, overwrite):
         checkConflictResult = self.checkConflict()
-        self.downloadTimes = 0
         if checkConflictResult == "188002":
+            self.downloadTimes = 0
             return db.profiles.insert_one(self.__dict__,)
         elif checkConflictResult == "188003" and overwrite:
             p = self.getProfile(self.profileName)

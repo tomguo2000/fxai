@@ -2,7 +2,7 @@ FROM python3.8_pip3_libs:0.9.5
 
 COPY ./requirements.txt /requirements.txt
 
-ARG env=online
+ARG env=test
 
 ENV env=$env
 
