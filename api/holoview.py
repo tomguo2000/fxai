@@ -26,6 +26,15 @@ import os
 holoview = Blueprint("holoview", __name__)
 
 
+def holo_service_isOnline():
+    url = 'http://192.168.0.237:8678/api/holoview/'
+    try:
+        html = requests.get(url, timeout=2)
+    except:
+        return False
+    return True
+
+
 @holoview.route('/', methods=['GET'])
 def holoview_index():
     # forword all params to upstreamURL
@@ -79,11 +88,18 @@ def holoview_getOverall():
         "message_MiscList": "Misc报文",
         "message_HeartbeatList": "心跳报文"
     }
-    return {
-               "code": 200,
-               "message": "获取整体指标成功",
-               "businessObj": overall
-           }, 200
+    if holo_service_isOnline():
+        return {
+                   "code": 200,
+                   "message": "获取整体指标成功",
+                   "businessObj": overall
+               }, 200
+    else:
+        return {
+                   "code": 400,
+                   "message": "小天这会儿休息了，小哥哥小姐姐一会再来聊吧。。。",
+                   "businessObj": None
+               }, 400
 
 
 
