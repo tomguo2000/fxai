@@ -16,7 +16,7 @@ index_blue = Blueprint('admin',__name__,template_folder='my_templates')
 """
 
 from flask import Blueprint,render_template,make_response,jsonify
-from flask import request
+from flask import request, current_app
 from config import env
 import requests
 import base64
@@ -26,13 +26,30 @@ import os
 holoview = Blueprint("holoview", __name__)
 
 
-def holo_service_isOnline():
-    url = 'http://192.168.0.237:8678/api/holoview/'
+def check_url_connection(url):
     try:
         html = requests.get(url, timeout=2)
     except:
         return False
     return True
+
+
+def holo_service_isOnline():
+    main_url = current_app.config['HOLO_SERVICE_URL']
+    back_url = 'http://192.168.10.89:8678/api/holoview/'
+
+    main_url_isOnline = check_url_connection(main_url)
+
+    if main_url_isOnline:
+        return True
+    else:
+        back_url_isOnline = check_url_connection(back_url)
+
+    if back_url_isOnline:
+        current_app.config['HOLO_SERVICE_URL'] = back_url
+        return True
+    else:
+        return False
 
 
 @holoview.route('/', methods=['GET'])
@@ -44,6 +61,8 @@ def holoview_index():
     params['env'] = env
 
     upstreamURL = 'http://192.168.0.237:8678/api/holoview/'
+    upstreamURL = current_app.config['HOLO_SERVICE_URL']
+
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
 
@@ -55,7 +74,7 @@ def holoview_checkSignal():
     # if not params.get('env'):
     params['env'] = env
 
-    upstreamURL = 'http://192.168.0.237:8678/api/holoview/checkSignal'
+    upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'checkSignal'
 
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
@@ -68,7 +87,8 @@ def holoview_findSignal():
     # if not params.get('env'):
     params['env'] = env
 
-    upstreamURL = 'http://192.168.0.237:8678/api/holoview/findSignal'
+    # upstreamURL = 'http://192.168.0.237:8678/api/holoview/findSignal'
+    upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'findSignal'
 
     return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
 
@@ -113,6 +133,8 @@ def holoview_getHelp():
     # return render_template('holoview_help.html', img1data=imgData)
 
     params = request.args.to_dict()
-    upstreamURL = 'http://192.168.0.237:8678/api/holoview/help'
+
+    # upstreamURL = 'http://192.168.0.237:8678/api/holoview/help'
+    upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'help'
 
     return requests.get(upstreamURL, params=params).content

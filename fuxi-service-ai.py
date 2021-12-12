@@ -13,6 +13,8 @@ app = Flask(__name__, static_folder='', static_url_path='')
 app.register_blueprint(holoview, url_prefix="/ai/api/holoview")
 app.register_blueprint(profiles, url_prefix="/ai/api/holoview/profiles")
 
+app.config['HOLO_SERVICE_URL'] = 'http://192.168.0.237:8678/api/holoview/'
+
 gzip = Gzip(app)
 
 @app.before_request
