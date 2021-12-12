@@ -14,6 +14,7 @@ app.register_blueprint(holoview, url_prefix="/ai/api/holoview")
 app.register_blueprint(profiles, url_prefix="/ai/api/holoview/profiles")
 
 app.config['HOLO_SERVICE_URL'] = 'http://192.168.0.237:8678/api/holoview/'
+app.config['HOLO_SERVER'] = 'MAIN'
 
 gzip = Gzip(app)
 

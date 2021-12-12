@@ -25,6 +25,11 @@ import os
 
 holoview = Blueprint("holoview", __name__)
 
+NO_SERVICE = {
+               "code": 400,
+               "message": "小天这会儿休息了，小哥哥小姐姐一会再来聊吧。。。",
+               "businessObj": None
+            }, 400
 
 def check_url_connection(url):
     try:
@@ -35,20 +40,24 @@ def check_url_connection(url):
 
 
 def holo_service_isOnline():
-    main_url = current_app.config['HOLO_SERVICE_URL']
+    main_url = 'http://192.168.0.237:8678/api/holoview/'
     back_url = 'http://192.168.10.89:8678/api/holoview/'
 
     main_url_isOnline = check_url_connection(main_url)
 
     if main_url_isOnline:
+        current_app.config['HOLO_SERVICE_URL'] = main_url
+        current_app.config['HOLO_SERVER'] = 'MAIN'
         return True
     else:
         back_url_isOnline = check_url_connection(back_url)
 
     if back_url_isOnline:
         current_app.config['HOLO_SERVICE_URL'] = back_url
+        current_app.config['HOLO_SERVER'] = 'GPU'
         return True
     else:
+        current_app.config['HOLO_SERVER'] = 'NONE'
         return False
 
 
@@ -59,11 +68,15 @@ def holoview_index():
     # Add env(online / test / local) into query params
     # if not params.get('env'):
     params['env'] = env
+    if current_app.config['HOLO_SERVER'] == 'GPU':
+        params['env'] = 'gpu' + params['env']
 
-    upstreamURL = 'http://192.168.0.237:8678/api/holoview/'
     upstreamURL = current_app.config['HOLO_SERVICE_URL']
 
-    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    if current_app.config['HOLO_SERVER'] != 'NULL':
+        return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    else:
+        return NO_SERVICE
 
 
 @holoview.route('/checkSignal', methods=['GET'])
@@ -73,10 +86,15 @@ def holoview_checkSignal():
     # Add env(online / test / local) into query params
     # if not params.get('env'):
     params['env'] = env
+    if current_app.config['HOLO_SERVER'] == 'GPU':
+        params['env'] = 'gpu' + params['env']
 
     upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'checkSignal'
 
-    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    if current_app.config['HOLO_SERVER'] != 'NULL':
+        return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    else:
+        return NO_SERVICE
 
 
 @holoview.route('/findSignal', methods=['GET'])
@@ -86,11 +104,16 @@ def holoview_findSignal():
     # Add env(online / test / local) into query params
     # if not params.get('env'):
     params['env'] = env
+    if current_app.config['HOLO_SERVER'] == 'GPU':
+        params['env'] = 'gpu' + params['env']
 
     # upstreamURL = 'http://192.168.0.237:8678/api/holoview/findSignal'
     upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'findSignal'
 
-    return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    if current_app.config['HOLO_SERVER'] != 'NULL':
+        return requests.get(upstreamURL, params=params).content, [('Content-Type', 'application/json')]
+    else:
+        return NO_SERVICE
 
 
 @holoview.route('/overall', methods=["GET"])
@@ -115,12 +138,7 @@ def holoview_getOverall():
                    "businessObj": overall
                }, 200
     else:
-        return {
-                   "code": 400,
-                   "message": "小天这会儿休息了，小哥哥小姐姐一会再来聊吧。。。",
-                   "businessObj": None
-               }, 400
-
+        return NO_SERVICE
 
 
 @holoview.route('/help', methods=["GET"])
