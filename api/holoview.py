@@ -156,3 +156,19 @@ def holoview_getHelp():
     upstreamURL = current_app.config['HOLO_SERVICE_URL'] + 'help'
 
     return requests.get(upstreamURL, params=params).content
+
+
+@holoview.route('/status', methods=["GET"])
+def holoview_getStatus():
+    import socket
+    host = socket.getfqdn()
+    addr = socket.gethostbyname(host)
+    HOLO_SERVER = current_app.config['HOLO_SERVER']
+    HOLO_SERVICE_URL = current_app.config['HOLO_SERVICE_URL']
+
+    return {
+        'HOLO_AI_HOST': host,
+        'HOLO_AI_ADDRESS': addr,
+        'HOLO_SERVER': HOLO_SERVER,
+        'HOLO_SERVICE_URL': HOLO_SERVICE_URL
+    }, 200
